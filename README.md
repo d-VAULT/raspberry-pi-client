@@ -1,7 +1,9 @@
 # Raspberry Pi client
 
 ## Backend
-Initially playground for the IOTA Python client.
+Performs a push sum algorithm via smart meters connected with the IOTA Tangle to determine the aggregate energy usage in a group belonging to an energy supplier.
+
+Communications between the meters is encrypted so that the energy supplier cannot see individual usage. Weight in the push sum is homomorphically encrypted with the public key of the energy supplier so that only the energy supplier can see the total sum.
 
 Next up:
 
