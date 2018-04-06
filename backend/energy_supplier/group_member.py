@@ -3,6 +3,6 @@ class GroupMember:
     IOTA addresses and public key of the group member
     """
 
-    # Group IOTA address to public key
-    address = ""
-    publicKey = ""
+    def __init__(self, address, publicKey):
+        self.address = address
+        self.public_key = public_key

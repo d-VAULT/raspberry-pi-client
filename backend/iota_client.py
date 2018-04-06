@@ -36,6 +36,7 @@ class IotaClient(object):
         if len(transactions) == 1:
             return transactions[0]
         else:
+            # TODO: write own implementation of iota.util.extractJson(bundle)
             raise ValueError('More than one transactions in bundle')
 
     def get_last_transaction(self):
