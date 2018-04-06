@@ -1,6 +1,7 @@
 from energy_supplier.group import Group
 from iota_client import IotaClient
 from random import randint
+import json
 
 
 class PushSum(object):
@@ -23,10 +24,16 @@ class PushSum(object):
         idx = randint(0, self.group_count-1)
         return self.group_members[idx]
 
-    def round():
-        send()
-        return None
-        # receive()
+    # def round():
+    #     send()
+    #     return None
+    #     # receive()
+
+    def make_message(self):
+        """Creates a JSON message of our current value and weight"""
+        message = {'VALUE': self._value, 'WEIGHT': self._weight}
+
+        return json.dumps(message)
 
     def send(self):
         # "Send" half of our weight and value to ourselves
@@ -35,7 +42,8 @@ class PushSum(object):
 
         # Send other half of our weight and value to random receiver in group
         member = self.get_random_group_member()
-        self._iota_client.send_transaction(member.address, "TODO", "NUON", 0)
+        message = self.make_message()
+        self._iota_client.send_transaction(member.address, message, "NUON", 0)
 
 
 

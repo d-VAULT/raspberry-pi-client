@@ -15,3 +15,7 @@ def test_init():
 def test_random_group_member():
     member = ps.get_random_group_member()
     assert type(member) == type(GroupMember(None, None))
+
+def test_make_message():
+    message = ps.make_message()
+    assert message[0] == "{"
