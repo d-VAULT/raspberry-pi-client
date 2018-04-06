@@ -38,18 +38,15 @@ class IotaClient(object):
         else:
             raise ValueError('More than one transactions in bundle')
 
-    @staticmethod
-    def _message_to_json(message):
-        return json.loads(message)
-
     def get_last_transaction(self):
         bundle = self._get_last_bundle()
         transaction = self._get_transaction_from_bundle(bundle)
         return transaction
 
-    def get_message(self, transaction):
+    @staticmethod
+    def get_message(transaction):
         message = transaction['signature_message_fragment'].decode()
-        json_message = self._message_to_json(message)
+        json_message = json.loads(message)
         return json_message
 
     def send_transaction(self, address, msg, tag, val):
