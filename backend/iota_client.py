@@ -100,7 +100,7 @@ class IotaClient(object):
         return json_message
 
     def send_transaction(self, address, msg, tag, val):
-        txn = self._compose_transaction(address, msg, tag, val)
+        txn = self._compose_transaction(Address(address), msg, tag, val)
         mwm = self._min_weight_magnitude
         depth = self._depth
         self._api.send_transfer(depth, [txn], None, None, mwm)
