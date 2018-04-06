@@ -6,14 +6,24 @@ import './App.css';
 class App extends Component {
   constructor() {
     super();
-    this.state = { identity: "loading" };
+    this.state = {
+      identity: "loading",
+      selectedSupplier: "nuon",
+    };
+  }
+
+  selectSupplier(newSelectedSupplier) {
+    this.setState({
+      selectedSupplier: newSelectedSupplier,
+    })
   }
 
   componentDidMount() {
-    axios.get('/api/identity')
+    axios
+      .get('/api/identity')
       .then(response => {
         this.setState({
-          identity: response.data
+          identity: response.data,
         });
       })
       .catch(error => {
@@ -22,7 +32,7 @@ class App extends Component {
   }
 
   render() {
-    const { identity } = this.state;
+    const { identity, selectedSupplier } = this.state;
     return (
       <div className="App">
         <div id="wrap">
@@ -31,9 +41,9 @@ class App extends Component {
         		<div id="title">
         		Supplier
         		</div>
-          	<img src="/images/nuon_off.png" id="image1"/>
-          	<img src="/images/budget_off.png" id="image1"/>
-          	<img src="/images/bron_off.png" id="image1"/>
+          	<img src={"/images/nuon_" + (selectedSupplier==='nuon' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('nuon')}/>
+          	<img src={"/images/budget_" + (selectedSupplier==='budget-energie' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('budget-energie')}/>
+          	<img src={"/images/bron_" + (selectedSupplier==='vandebron' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('vandebron')}/>
 
         		<img src="/images/share.png" id="image2"/>
         	</div>
