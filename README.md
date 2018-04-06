@@ -10,6 +10,13 @@ Next up:
 
 ### Installation
 
+Install [the Python](https://conda.io/docs/user-guide/install/index.html).
+
+Install dependencies:
+```
+pip install pyota
+```
+
 Environment variables:
 
 Generate a seed
