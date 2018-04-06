@@ -10,7 +10,7 @@ class Group:
     def __init__(self):
         self.members = self.get_group()
 
-    """Get group via IOTA"""
     def get_group(self):
+        """Get group via IOTA"""
         # TODO: get groups via IOTA client
         None
