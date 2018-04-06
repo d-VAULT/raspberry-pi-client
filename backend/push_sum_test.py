@@ -9,12 +9,15 @@ client = IotaClient(seed, provider)
 
 ps = PushSum(10, client)
 
+
 def test_init():
     assert len(ps.group_members) == 2
 
+
 def test_random_group_member():
     member = ps.get_random_group_member()
-    assert type(member) == type(GroupMember(None, None))
+    assert isinstance(member, GroupMember)
+
 
 def test_make_message():
     message = ps.make_message()
