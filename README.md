@@ -15,6 +15,7 @@ Install [the Python](https://conda.io/docs/user-guide/install/index.html).
 Install dependencies:
 ```
 pip install pyota
+pip install pytest
 ```
 
 Environment variables:
