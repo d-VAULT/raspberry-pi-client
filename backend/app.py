@@ -7,6 +7,9 @@ import atexit
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.triggers.date import DateTrigger
+from datetime import datetime, timedelta
+
 from push_sum import PushSum
 
 # Get LAN ip
@@ -16,22 +19,57 @@ if 'wlan0' in interfaces:
 else:
     ip = "X"
 
-ps = PushSum(110, total_rounds=30)
+# set push sum parameters
+value = 10
+total_rounds = 30
 
-def do_push_sum():
-    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-    ps.iterate_round()
+def do_push_sum_cycle(value, total_rounds, start_date_sum):
+    ps = PushSum(value, total_rounds=total_rounds)
+    round_time_seconds = ps.round_time_seconds
 
-scheduler = BackgroundScheduler()
-scheduler.start()
-scheduler.add_job(
-    func=do_push_sum,
-    trigger=IntervalTrigger(seconds=5),
-    id='do_push_sum',
-    name='Perform push sum work',
-    replace_existing=False)
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
+    def do_push_sum():
+        print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+        ps.iterate_round()
+
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+    scheduler.add_job(
+        func=do_push_sum,
+        start_date=start_date_sum,
+        trigger=IntervalTrigger(seconds=round_time_seconds),
+        id='do_push_sum_cycle',
+        name='Perform push sum work',
+        replace_existing=False)
+
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
+
+
+def start_new_cycle(value, total_rounds, start_date_cycle):
+
+    start_date_sum = start_date_cycle + timedelta(seconds=2)
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+
+    scheduler.add_job(
+        func=do_push_sum_cycle,
+        args=[value, total_rounds, start_date_sum],
+        trigger=DateTrigger(start_date_cycle),
+        id='start_new_cycle',
+        name='Starts a new push sum',
+        replace_existing=False)
+
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
+
+
+#push_sum_object = PushSum(value, total_rounds=total_rounds)
+#ps = push_sum_object
+#do_push_sum_cycle(value, total_rounds, ps)
+start_date_cycle = datetime(2018, 4, 8, 00, 25, 1)
+start_new_cycle(value, total_rounds, start_date_cycle)
+
+
 
 meter = SmartMeter(SmartMeterProfile(True, False, False))
 
