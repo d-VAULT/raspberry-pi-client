@@ -12,10 +12,10 @@ class Group:
 
     def get_group(self):
         """Get group via IOTA"""
-        # TODO: get groups via IOTA client
 
-        # Initially hard coded
         erwin_address = 'bDGBTDPFMSOA9UEWMICRRYRPCISQWJGCOXFWCSXHMVTKDKSOVEBE9MHZCEGQDXFGHATCWICSKPSXLUUDMW'
         ruud_address = 'VHEPYOKMNPEZRWCGI9INUHBCSDOKCKYXWAYNQAPMRZYOVETIEBFBTKAWIJPFUXLMJEJQCDHJATVRHBIBC'
 
+        # Hard coded initially, group members can later be retrieved on public
+        # MAM address of the energy supplier
         return [GroupMember(erwin_address, "x"), GroupMember(ruud_address, "y")]
