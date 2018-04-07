@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import json
+from phe import paillier
 
-from phe import paillier, generate_paillier_keypair
 
 class Paillier(object):
+    """Python public key encryption and partial homomorphic encryption via paillier"""
     def __init__(self, public_key, private_key):
         self.public_key = public_key
         self._private_key = private_key
@@ -22,7 +22,7 @@ class Paillier(object):
     def _keypair_to_dict(public_key, _private_key):
         public_key_dict = Paillier._public_key_to_dict(public_key)
         private_key_dict = Paillier._private_key_to_dict(_private_key)
-        keypair_dict = {"public_key_dict":public_key_dict, "_private_key_dict":private_key_dict}
+        keypair_dict = {"public_key_dict": public_key_dict, "_private_key_dict": private_key_dict}
         return keypair_dict
 
     @staticmethod
@@ -49,42 +49,3 @@ class Paillier(object):
     @staticmethod
     def _public_key_from_dict(public_key_dict):
         return paillier.PaillierPublicKey(public_key_dict['n'])
-
-
-#        keys = ['g', 'n']
-#        d = public_key.__dict__
-#        public_key_dict = {k: d[k] for k in keys}
-
-
-
-#        serialised = json.dumps(public_key)
-#        return serialised
-
-
-#        enc_with_one_pub_key = {}
-#        enc_with_one_pub_key['public_key'] = {'g': public_key.g, 'n': public_key.n}
-#        enc_with_one_pub_key['values'] = [(str(x.ciphertext()), x.exponent) for x in encrypted_number_list
-
-def test_Paillier():
-    public_key, private_key = paillier.generate_paillier_keypair()
-
-    p = Paillier(public_key, private_key)
-
-    #p = Paillier().from_json(keypair_dict)
-
-    pubkd = p._public_key_to_dict(p.public_key)
-    prikd = p._private_key_to_dict(p._private_key)
-
-    #print (pubkd, prikd)
-
-    public = p._public_key_from_dict(pubkd)
-    private = p._private_key_from_dict(pubkd, prikd)
-
-    #print(public)
-    #print(private)
-
-    keypair = p.keypair_to_dict()
-
-    p._keypair_from_dict(keypair)
-    p2 = Paillier.from_keypair_dict(keypair)
-    assert(p2.public_key == p.public_key)
