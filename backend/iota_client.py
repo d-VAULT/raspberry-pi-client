@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from iota import Iota, Address, ProposedTransaction, Tag, TryteString
+from iota import Iota, Address, ProposedTransaction, Tag, TryteString, Transaction
 
 
 class IotaClient(object):
@@ -49,6 +49,39 @@ class IotaClient(object):
         bundle = self._get_last_bundle()
         transaction = self._get_transaction_from_bundle(bundle)
         return transaction
+
+    def get_transactions_on_address(self, address):
+        """
+        Gets transaction object from address sorted on timestamp (from latest to
+        earliest).
+
+        :param address:
+           Address to fetch transaction from
+
+        """
+        transactions = self._api.find_transactions(addresses=[address])
+        transaction_hashes = transactions['hashes']
+
+        if not transaction_hashes:
+            raise ValueError("No transactions on address")
+
+        trytes = self._api.get_trytes(transaction_hashes)['trytes']
+
+        trytes_and_hashes = list(zip(trytes, transaction_hashes))
+
+        transactions = list(map(lambda pair:
+                                Transaction.from_tryte_string(
+                                    pair[0],
+                                    pair[1]
+                                ),
+                                trytes_and_hashes))
+
+        sorted_transactions = sorted(transactions,
+                                     key=lambda t: t.timestamp,
+                                     reverse=True)
+
+        return sorted_transactions
+
 
     @staticmethod
     def get_message(transaction):
