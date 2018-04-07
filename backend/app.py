@@ -16,11 +16,11 @@ if 'wlan0' in interfaces:
 else:
     ip = "X"
 
-# ps = PushSum(110, total_rounds=30)
-#
-# def do_push_sum():
-#     print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-#     ps.iterate_round()
+ps = PushSum(110, total_rounds=30)
+
+def do_push_sum():
+    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    ps.iterate_round()
 
 scheduler = BackgroundScheduler()
 scheduler.start()
@@ -29,7 +29,7 @@ scheduler.add_job(
     trigger=IntervalTrigger(seconds=5),
     id='do_push_sum',
     name='Perform push sum work',
-    replace_existing=True)
+    replace_existing=False)
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
 
