@@ -36,6 +36,9 @@ class App extends Component {
     return (
       <div className="App">
         <div id="wrap">
+          <div id="tabs">
+            <img src="/images/tab.png" id="tabs-bar"/>
+          </div>
 
         	<div id="supplier">
         		<div id="title">
@@ -45,7 +48,7 @@ class App extends Component {
           	<img src={"/images/budget_" + (selectedSupplier==='budget-energie' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('budget-energie')}/>
           	<img src={"/images/bron_" + (selectedSupplier==='vandebron' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('vandebron')}/>
 
-        		<img src="/images/share.png" id="image2"/>
+
         	</div>
 
 
@@ -92,12 +95,6 @@ class App extends Component {
         			</div>
         		0
         		</div>
-
-        	<div id="logo">
-        		<img src="/images/logo.png" id="image3" />
-
-        	</div>
-
 
         	</div>
 

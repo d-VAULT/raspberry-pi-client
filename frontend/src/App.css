@@ -9,7 +9,7 @@ body {
 	color:#000;
 	font-family: Tahoma, Geneva, sans-serif;
 	font-size:0.8vw;
-	background-color:#6699ff;
+	background-color: white;
 }
 
 body a, body a:visited{
@@ -22,8 +22,6 @@ body a:hover {
 	text-decoration: none;
 }
 
-
-
 #wrap {
 	margin-right:auto;
     margin-left:auto;
@@ -34,7 +32,8 @@ body a:hover {
 }
 
 #title {
-	height:45px;
+	height:35px;
+  padding-bottom: 5px;
 	color:#fff;
 	font-size:26px;
 }
@@ -43,15 +42,13 @@ body a:hover {
 	width:200px;
 	height:420px;
 	float:left;
-	padding:30px;
+	padding:20px;
 }
 
 #power, #usage {
 	width:480px;
 	float:left;
-
-	padding:30px;
-
+	padding:20px;
 }
 
 #power {
