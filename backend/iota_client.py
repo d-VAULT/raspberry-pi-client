@@ -50,7 +50,7 @@ class IotaClient(object):
         transaction = self._get_transaction_from_bundle(bundle)
         return transaction
 
-    def get_transactions_on_address(self, address):
+    def get_transactions_from_address(self, address):
         """
         Gets transaction object from address sorted on timestamp (from latest to
         earliest).
@@ -86,12 +86,12 @@ class IotaClient(object):
         """
         Gets messages (sorted by timestamp)
         """
-        sorted_transactions = self.get_transactions_on_address(address)
-        messages = list(map(lambda t: Fragment.as_string(t.signature_message_fragment),
+        sorted_transactions = self.get_transactions_from_address(address)
+        messages = list(map(lambda t: {'json_message': json.loads(Fragment.as_string(t.signature_message_fragment)),
+                                       'timestamp': t.timestamp},
                             sorted_transactions))
 
         return messages
-
 
     @staticmethod
     def get_message(transaction):
