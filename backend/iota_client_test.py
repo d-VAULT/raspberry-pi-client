@@ -6,8 +6,11 @@ import time
 
 # Setup
 
+# Random seed for tests
+seed = "MPGFTSGNYSEYSCYQCXTTNWALGVKLSIYTICRRCIJBPYITUENBQESGBYOCSVGBUOWUTKLVUOEIDSZAYNXIA"
+
+
 provider = 'http://node01.testnet.iotatoken.nl:16265'
-seed = 'FFIPZLAYGDOLJJESXAJNJFBOVJLAIEQDTJXNCLBVRMZVQYRDHIQGZJHBNKY9QSRJSB9ESKNVE9HHIYBKF'
 client = IotaClient(seed, provider)
 iota_api = client._api
 
@@ -37,7 +40,7 @@ def test_transactions_from_address_are_sorted_on_timestamp():
 
 def test_messages_from_address_():
     messages = client.get_messages_from_address(address)
-    assert len(messages) > 100
+    assert len(messages) >= messages_count
 
 
 def test_get_messages_contains_timestamp():
