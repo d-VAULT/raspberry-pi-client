@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-import config
 
 from iota import Iota, Address, ProposedTransaction, Tag, TryteString, Transaction, Fragment
 
@@ -25,41 +24,13 @@ class IotaClient(object):
         return txn
 
     def _get_address(self):
-        address = self._api.get_new_addresses(0,1)['addresses'][0]
+        address = self._api.get_new_addresses(0, 1)['addresses'][0]
         return str(address)
-
-    def _get_bundles(self):
-        bundles = self._api.get_transfers()['bundles']
-        return bundles
-
-    def _get_last_bundle(self):
-        bundles = self._get_bundles()
-        return bundles[-1]
-
-    @staticmethod
-    def _get_transaction_from_bundle(bundle):
-        transactions = bundle.as_json_compatible()
-        if len(transactions) == 1:
-            return transactions[0]
-        else:
-            raise ValueError(
-                """
-                More than one transaction in bundle.
-
-                To support extracting JSON from bundle with more than one
-                transaction we need a Python implementation of the JavaScript
-                client's iota.util.extractJson(bundle) method.
-                """)
-
-    def get_last_transaction(self):
-        bundle = self._get_last_bundle()
-        transaction = self._get_transaction_from_bundle(bundle)
-        return transaction
 
     def get_transactions_from_address(self, address):
         """
-        Gets transaction object from address sorted on timestamp (from latest to
-        earliest).
+        Gets transaction object from address sorted on timestamp (from latest
+        to earliest).
 
         :param address:
            Address to fetch transaction from
@@ -90,7 +61,12 @@ class IotaClient(object):
 
     def get_messages_from_address(self, address):
         """
-        Gets messages (sorted by timestamp)
+        Gets messages (sorted by timestamp).
+        Returns a dict with 'json_message' and 'timestamp keys'
+
+        :param address:
+           Address to fetch messages from
+
         """
         sorted_transactions = self.get_transactions_from_address(address)
         messages = list(map(lambda t: {'json_message': json.loads(Fragment.as_string(t.signature_message_fragment)),
