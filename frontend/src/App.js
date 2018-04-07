@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import SupplierButton from './components/SupplierButton';
+import ImageCheckbox from './components/ImageCheckbox';
 
 import './App.css';
 
@@ -15,6 +16,11 @@ class App extends Component {
         'budget-energie',
         'vandebron',
       ],
+      profile: {
+        'bulb': true,
+        'car': false,
+        'wind': false,
+      },
       selectedSupplier: "nuon",
     };
   }
@@ -22,7 +28,16 @@ class App extends Component {
   selectSupplier(newSelectedSupplier) {
     this.setState({
       selectedSupplier: newSelectedSupplier,
-    })
+    });
+  }
+
+  toggleProfile(profileFactor) {
+    this.setState({
+      profile: {
+        ...this.state.profile,
+        [profileFactor]: !this.state.profile[profileFactor],
+      },
+    });
   }
 
   componentDidMount() {
@@ -39,11 +54,11 @@ class App extends Component {
   }
 
   render() {
-    const { identity, suppliers, selectedSupplier } = this.state;
+    const { identity, suppliers, selectedSupplier, profile } = this.state;
     return (
       <div className="App">
         <div id="wrap">
-          <div id="tabs"><img src="/images/tab.png" id="tabs-bar"/></div>
+          <div id="tabs"><img alt="tabs" src="/images/tab.png" id="tabs-bar"/></div>
 
         	<div id="supplier">
         		<div id="title">Supplier</div>
@@ -56,9 +71,9 @@ class App extends Component {
         		<div id="title">
         		  My power ({ identity })
         		</div>
-          	<img src="/images/bulb_off.png" id="image2"/>
-          	<img src="/images/car_off.png" id="image2"/>
-          	<img src="/images/mill_off.png" id="image2"/>
+            <ImageCheckbox name="bulb" enabled={profile.bulb} enabledImage="/images/bulb_on.gif"  disabledImage="/images/bulb_off.png" onClick={() => this.toggleProfile('bulb')}/>
+            <ImageCheckbox name="car" enabled={profile.car} enabledImage="/images/car_on.gif"  disabledImage="/images/car_off.png" onClick={() => this.toggleProfile('car')}/>
+            <ImageCheckbox name="wind" enabled={profile.wind} enabledImage="/images/wind_on.gif"  disabledImage="/images/wind_off.png" onClick={() => this.toggleProfile('wind')}/>
         	</div>
 
         	<div id="usage">
