@@ -15,8 +15,8 @@ class PushSum(object):
             self._iota_client = IotaClient(seed, provider)
         else:
             self._iota_client = client
-        self._weight = 1
-        self._value = value
+        self._weight = float(1)
+        self._value = float(value)
         self._address = self._iota_client.address
         self.group_members = self.get_group_members()
         self.group_count = len(self.group_members)
@@ -78,8 +78,8 @@ class PushSum(object):
             print("\nreceived:\n\n", prev_round_data_sum['value'],prev_round_data_sum['weight'])
 
             # add previous round data to internal data
-            self._value += prev_round_data_sum['value'] / 2
-            self._weight += prev_round_data_sum['weight'] / 2
+            self._value += prev_round_data_sum['value'] * 0.5
+            self._weight += prev_round_data_sum['weight'] * 0.5
 
         # print total
         print("\ncurrent values:\n\n",self._value, self._weight, self.get_total())
