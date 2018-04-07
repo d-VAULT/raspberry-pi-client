@@ -6,7 +6,7 @@ from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
 # Get LAN ip
 interfaces = netifaces.interfaces()
 if 'wlan0' in interfaces:
-    ip = netifaces.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+    ip = netifaces.ifaddresses('wlan0')[interfaces.AF_INET][0]['addr']
 else:
     ip = "localhost"
 
