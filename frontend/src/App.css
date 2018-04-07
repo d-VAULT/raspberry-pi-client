@@ -76,25 +76,12 @@ body a:hover {
 
 }
 
-#logo{
-	width:100px;
-	float:left;
-	text-align:right;
-	vertical-align:bottom;
-}
-
-#image1 {
-width:200px;
-padding-bottom:20px;
-}
-
 #image2 {
-width:135px;
-padding-right:20px;
+  width:135px;
+  padding-right:20px;
 }
 
 #image3 {
-width:90px;
-padding-top:60px;
-
+  width:90px;
+  padding-top:60px;
 }

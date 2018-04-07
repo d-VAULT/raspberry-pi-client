@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+
+import SupplierButton from './components/SupplierButton';
+
 import './App.css';
 
 class App extends Component {
@@ -7,6 +10,11 @@ class App extends Component {
     super();
     this.state = {
       identity: "loading",
+      suppliers: [
+        'nuon',
+        'budget-energie',
+        'vandebron',
+      ],
       selectedSupplier: "nuon",
     };
   }
@@ -31,26 +39,18 @@ class App extends Component {
   }
 
   render() {
-    const { identity, selectedSupplier } = this.state;
+    const { identity, suppliers, selectedSupplier } = this.state;
     return (
       <div className="App">
         <div id="wrap">
-          <div id="tabs">
-            <img src="/images/tab.png" id="tabs-bar"/>
-          </div>
+          <div id="tabs"><img src="/images/tab.png" id="tabs-bar"/></div>
 
         	<div id="supplier">
-        		<div id="title">
-        		Supplier
-        		</div>
-          	<img src={"/images/nuon_" + (selectedSupplier==='nuon' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('nuon')}/>
-          	<img src={"/images/budget_" + (selectedSupplier==='budget-energie' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('budget-energie')}/>
-          	<img src={"/images/bron_" + (selectedSupplier==='vandebron' ? 'on' : 'off') + ".png"} id="image1" onClick={() => this.selectSupplier('vandebron')}/>
-
-
+        		<div id="title">Supplier</div>
+            { suppliers.map(supplier =>
+              <SupplierButton key={supplier} supplierName={supplier} selected={selectedSupplier===supplier} onClick={() => this.selectSupplier(supplier)}/>
+            )}
         	</div>
-
-
 
         	<div id="power">
         		<div id="title">
@@ -61,40 +61,28 @@ class App extends Component {
           	<img src="/images/mill_off.png" id="image2"/>
         	</div>
 
-
-
         	<div id="usage">
-        		<div id="title">
+        		<div id="title"></div>
+
+        		<div id="usage_sub">
+        			<div id="title_sub">My usage</div>
+        		  <span>1000</span>
         		</div>
 
         		<div id="usage_sub">
-        			<div id="title_sub">
-        			My usage
-        			</div>
-        		1000
+        			<div id="title_sub">Generating</div>
+        		  <span>300</span>
         		</div>
 
         		<div id="usage_sub">
-        			<div id="title_sub">
-        			Generating
-        			</div>
-        		300
+        			<div id="title_sub">Demand</div>
+        		  <span>700</span>
         		</div>
 
         		<div id="usage_sub">
-        			<div id="title_sub">
-        			Demand
-        			</div>
-        		700
+        			<div id="title_sub">Supply</div>
+        		  <span>0</span>
         		</div>
-
-        		<div id="usage_sub">
-        			<div id="title_sub">
-        			Supply
-        			</div>
-        		0
-        		</div>
-
         	</div>
 
         </div>
