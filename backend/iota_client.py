@@ -36,8 +36,14 @@ class IotaClient(object):
         if len(transactions) == 1:
             return transactions[0]
         else:
-            # TODO: write own implementation of iota.util.extractJson(bundle)
-            raise ValueError('More than one transactions in bundle')
+            raise ValueError(
+                """
+                More than one transaction in bundle.
+
+                To support extracting JSON from bundle with more than one
+                transaction we need a Python implementation of the JavaScript
+                client's iota.util.extractJson(bundle) method.
+                """)
 
     def get_last_transaction(self):
         bundle = self._get_last_bundle()
