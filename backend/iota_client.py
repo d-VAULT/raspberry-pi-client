@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from iota import Iota, Address, ProposedTransaction, Tag, TryteString, Transaction
+from iota import Iota, Address, ProposedTransaction, Tag, TryteString, Transaction, Fragment
 
 
 class IotaClient(object):
@@ -81,6 +81,16 @@ class IotaClient(object):
                                      reverse=True)
 
         return sorted_transactions
+
+    def get_messages_from_address(self, address):
+        """
+        Gets messages (sorted by timestamp)
+        """
+        sorted_transactions = self.get_transactions_on_address(address)
+        messages = list(map(lambda t: Fragment.as_string(t.signature_message_fragment),
+                            sorted_transactions))
+
+        return messages
 
 
     @staticmethod
