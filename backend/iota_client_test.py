@@ -43,3 +43,13 @@ def test_get_messages_contains_timestamp():
     current_time = int(time.time())
 
     assert timestamp < current_time
+
+
+def test_get_messages_are_sorted_on_timestamp():
+    retrieved_messages = client.get_messages_from_address(address)
+    timestamps = [dict.get(msg, 'timestamp') for msg in retrieved_messages]
+
+    is_sorted = all(timestamps[i] >= timestamps[i+1]
+                    for i in range(len(timestamps)-1))
+
+    assert is_sorted
