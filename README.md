@@ -16,6 +16,7 @@ Install [the Python](https://conda.io/docs/user-guide/install/index.html).
 
 Install dependencies:
 ```
+brew install libmpc mpfr gmp
 pip install -r requirements.txt
 pip install pyota[ccurl]
 ```
@@ -31,6 +32,7 @@ add this seed in an environment variable SEED.
 
 ```
 export SEED=<yourseed>
+export AGGREGATOR_ADDRESS='XBC9JOMDXVRTS9VRLULWYBHNGK9BMYMQKKZFDNFFHTJCNCT9LQJQQIBF9PEAUZVRPCRDMXFONZLSYBVJA'
 ```
 
 ### Tests

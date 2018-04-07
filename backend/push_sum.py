@@ -1,6 +1,7 @@
 from energy_supplier.group import Group
 from iota_client import IotaClient
 from random import randint
+import config
 import time
 import json
 import pandas as pd
@@ -14,15 +15,17 @@ class PushSum(object):
         self._iota_client = iota_client
         self._weight = 1
         self._value = value
-        self._address = ps._iota_client.address
+        self._address = self._iota_client.address
         self.group_members = self.get_group_members()
         self.group_count = len(self.group_members)
         self.cycle_time_seconds = cycle_time_seconds
-        #How many rounds are there before we send the aggregated push sum
-        #value to the energy supplier address?
+
+        # How many rounds are there before we send the aggregated push sum
+        # value to the energy supplier address?
         self.total_rounds = total_rounds
-        #How long does a push sum round take in seconds(in a round we receive message
-        #and we send one message to a random receiver)
+
+        # How long does a push sum round take in seconds(in a round we receive
+        # message and we send one message to a random receiver)
         self.round_time_seconds = int(cycle_time_seconds/total_rounds)
 
     @staticmethod
@@ -44,6 +47,23 @@ class PushSum(object):
         message = {'value': self._value, 'weight': self._weight}
 
         return json.dumps(message)
+
+    def get_total(self):
+        total = (self._value/self._weight)*self.group_count
+        return total
+
+    def send_result_to_aggregator(self):
+        """Sends total result to aggregator's address"""
+        total = self.get_total()
+        message = json.dumps({'total_energy_usage': total})
+        tag = "AGGREGATED"
+        iota_val = 0
+
+        self._iota_client.send_transaction(
+            config.aggregator_address,
+            message,
+            tag,
+            iota_val)
 
     def send(self):
         # "Send" half of our weight and value to ourselves
