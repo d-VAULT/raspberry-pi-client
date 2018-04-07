@@ -37,11 +37,6 @@ class PushSum(object):
         idx = randint(0, self.group_count-1)
         return self.group_members[idx]
 
-    # def round():
-    #     send()
-    #     return None
-    #     # receive()
-
     def make_message(self):
         """Creates a JSON message of our current value and weight"""
         message = {'value': self._value, 'weight': self._weight}
@@ -65,15 +60,38 @@ class PushSum(object):
             tag,
             iota_val)
 
-    def send(self):
-        # "Send" half of our weight and value to ourselves
-        self._weight *= 0.5
-        self._value *= 0.5
+    def iterate_round(self, tag = None):
+        round_index = self._get_round_index()
+        round_id = self._get_round_id()
+        print("*** round index: ", round_index)
 
-        # Send other half of our weight and value to random receiver in group
+        if round_index>0:
+            # half our weight and value
+            self._weight *= 0.5
+            self._value *= 0.5
+
+            # collect all recieved data from previous round
+            prev_round_data_sum = ps.get_round_messages(round_id-1).sum()
+
+            print("\nreceived:\n\n", prev_round_data_sum['value'],prev_round_data_sum['weight'])
+
+            # add previous round data to internal data
+            self._value += prev_round_data_sum['value']
+            self._weight += prev_round_data_sum['weight']
+
+        # print total
+        print("\ncurrent values:\n\n",self._value, self._weight, self.get_total())
+
+        # select random group member for sending current value pair
         member = self.get_random_group_member()
+
+        # print public key as a reference for testing
+        print(member.public_key)
+
+        # compose mesage for selected group member
         message = self.make_message()
-        print(ps.get_random_group_member().public_key)
+
+        # send message containing value pair to selected group member
         self._iota_client.send_transaction(member.address, message, "NUON", 0)
 
     def _get_cycle_id(self, timestamp=None):
@@ -100,6 +118,12 @@ class PushSum(object):
         round_time = int(timestamp%self.round_time_seconds)
         return round_time
 
+    def _get_round_index(self, round_id=None):
+        if not round_id:
+            round_id = self._get_round_id()
+        round_index = round_id%self.round_time_seconds
+        return round_index
+
     def get_round_messages(self, round_id):
         msg_df = self.receive()
         round_msg_df = msg_df[msg_df["round_id"]==round_id].copy()
@@ -121,8 +145,9 @@ class PushSum(object):
     def parse_timing_attributes(self, msg_df):
         msg_df["cycle_id"] = msg_df["timestamp"].apply(lambda t: self._get_cycle_id(t))
         msg_df["cycle_time"] = msg_df["timestamp"].apply(lambda t: self._get_cycle_time(t))
-        msg_df["round_id"] = msg_df["cycle_time"].apply(lambda t: self._get_round_id(t))
-        msg_df["round_time"] = msg_df["cycle_time"].apply(lambda t: self._get_round_time(t))
+        msg_df["round_id"] = msg_df["timestamp"].apply(lambda t: self._get_round_id(t))
+        msg_df["round_time"] = msg_df["timestamp"].apply(lambda t: self._get_round_time(t))
+        msg_df["round_index"] = msg_df["round_id"].apply(lambda t: self._get_round_index(t))
         del msg_df["timestamp"]
         return msg_df
 
