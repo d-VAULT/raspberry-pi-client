@@ -4,7 +4,7 @@ import random
 profileBase = 20
 profileBulbValue = 200
 profileCarValue = 500
-profileWindValue = 200
+profileWindValue = 300
 
 class SmartMeter:
     def __init__(self, profile):

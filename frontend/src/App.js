@@ -118,22 +118,22 @@ class App extends Component {
 
           		<div id="usage_sub">
           			<div id="title_sub">My usage</div>
-          		  <span>{ data.usage } Wh</span>
+          		  <span>{ data.usage } W</span>
           		</div>
 
           		<div id="usage_sub">
           			<div id="title_sub">Generating</div>
-          		  <span>{ data.generation } Wh</span>
+          		  <span>{ data.generation } W</span>
           		</div>
 
           		<div id="usage_sub">
           			<div id="title_sub">Demand</div>
-          		  <span>{ data.demand } Wh</span>
+          		  <span>{ data.demand } W</span>
           		</div>
 
           		<div id="usage_sub">
           			<div id="title_sub">Supply</div>
-          		  <span>{ data.supply } Wh</span>
+          		  <span>{ data.supply } W</span>
           		</div>
           	</div>
           ) : "loading data" }
