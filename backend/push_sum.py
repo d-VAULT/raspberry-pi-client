@@ -62,6 +62,9 @@ class PushSum(object):
             tag,
             iota_val)
 
+        # print aggregated value
+        print("CYCLE COMPLETED SUCCESFULLY\nAGGREGATED TOTAL: ", total)
+
     def iterate_round(self, tag = None):
         round_index = self._get_round_index()
         round_id = self._get_round_id()
