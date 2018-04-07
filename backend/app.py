@@ -6,9 +6,9 @@ from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
 # Get LAN ip
 interfaces = netifaces.interfaces()
 if 'wlan0' in interfaces:
-    ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+    ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr'].split('.')[3]
 else:
-    ip = "localhost"
+    ip = "X"
 
 app = Flask(__name__, static_folder='../frontend/build')
 
