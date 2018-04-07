@@ -49,3 +49,9 @@ pytest
 ## Frontend
 
 Serves the frontend on the display of the Pi. Talks with the backend.
+
+- Install NodeJS
+- `cd frontend`
+- `yarn install`
+- `yarn start` (to run the development version that proxies the backend)
+- `yarn build` (to generate production version for the Pi)
