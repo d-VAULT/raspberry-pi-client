@@ -53,3 +53,8 @@ def test_get_messages_are_sorted_on_timestamp():
                     for i in range(len(timestamps)-1))
 
     assert is_sorted
+
+
+def test_get_messages_contain_json_dict():
+    retrieved_messages = client.get_messages_from_address(address)
+    assert isinstance(dict.get(retrieved_messages[0], 'json_message'), dict)
