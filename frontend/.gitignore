@@ -7,7 +7,7 @@
 /coverage
 
 # production
-/build
+# /build # We check in the build folder because Raspberry Pi's are slow with webpack
 
 # misc
 .DS_Store
