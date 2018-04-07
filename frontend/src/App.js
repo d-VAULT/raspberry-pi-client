@@ -16,13 +16,48 @@ class App extends Component {
         'budget-energie',
         'vandebron',
       ],
-      profile: {
-        'bulb': true,
-        'car': false,
-        'wind': false,
-      },
       selectedSupplier: "nuon",
     };
+  }
+
+  componentDidMount() {
+    axios
+      .get('/api/identity')
+      .then(response => {
+        this.setState({
+          identity: response.data.identity,
+          profile: response.data.profile,
+        });
+        if (!this.state.pollTimerId) {
+          this.startPolling();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  startPolling() {
+    const pollTimerId = setInterval(this.poll, 1000, this);
+    this.setState({ pollTimerId });
+  }
+
+  stopPolling() {
+    if (this.state.pollTimerId) {
+      clearInterval(this.state.pollTimerId);
+      this.setState({ pollTimerId: undefined });
+    }
+  }
+
+  poll(self) {
+    axios
+      .get('/api/data')
+      .then(response => response.data)
+      .then(data => {
+        self.setState({
+          data
+        })
+      })
   }
 
   selectSupplier(newSelectedSupplier) {
@@ -32,29 +67,28 @@ class App extends Component {
   }
 
   toggleProfile(profileFactor) {
-    this.setState({
-      profile: {
-        ...this.state.profile,
-        [profileFactor]: !this.state.profile[profileFactor],
-      },
-    });
-  }
-
-  componentDidMount() {
+    const newProfile = {
+      ...this.state.profile,
+      [profileFactor]: !this.state.profile[profileFactor],
+    };
     axios
-      .get('/api/identity')
-      .then(response => {
-        this.setState({
-          identity: response.data,
-        });
+      .post('/api/update-profile', newProfile, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
       })
-      .catch(error => {
-        console.error(error);
+      .then(response => response.data)
+      .then(data => {
+        this.setState({
+          profile: data.profile,
+        });
       });
+
   }
 
   render() {
-    const { identity, suppliers, selectedSupplier, profile } = this.state;
+    const { identity, suppliers, selectedSupplier, profile, data } = this.state;
     return (
       <div className="App">
         <div id="wrap">
@@ -67,38 +101,42 @@ class App extends Component {
             )}
         	</div>
 
-        	<div id="power">
-        		<div id="title">
-        		  My power ({ identity })
-        		</div>
-            <ImageCheckbox name="bulb" enabled={profile.bulb} enabledImage="/images/bulb_on.gif"  disabledImage="/images/bulb_off.png" onClick={() => this.toggleProfile('bulb')}/>
-            <ImageCheckbox name="car" enabled={profile.car} enabledImage="/images/car_on.gif"  disabledImage="/images/car_off.png" onClick={() => this.toggleProfile('car')}/>
-            <ImageCheckbox name="wind" enabled={profile.wind} enabledImage="/images/wind_on.gif"  disabledImage="/images/wind_off.png" onClick={() => this.toggleProfile('wind')}/>
-        	</div>
+          { profile ? (
+          	<div id="power">
+          		<div id="title">
+          		  My power ({ identity })
+          		</div>
+              <ImageCheckbox name="bulb" enabled={profile.bulb} enabledImage="/images/bulb_on.gif"  disabledImage="/images/bulb_off.png" onClick={() => this.toggleProfile('bulb')}/>
+              <ImageCheckbox name="car" enabled={profile.car} enabledImage="/images/car_on.gif"  disabledImage="/images/car_off.png" onClick={() => this.toggleProfile('car')}/>
+              <ImageCheckbox name="wind" enabled={profile.wind} enabledImage="/images/wind_on.gif"  disabledImage="/images/wind_off.png" onClick={() => this.toggleProfile('wind')}/>
+        	  </div>
+          ) : "" }
 
-        	<div id="usage">
-        		<div id="title"></div>
+        	{ data ? (
+            <div id="usage">
+          		<div id="title"></div>
 
-        		<div id="usage_sub">
-        			<div id="title_sub">My usage</div>
-        		  <span>1000 Wh</span>
-        		</div>
+          		<div id="usage_sub">
+          			<div id="title_sub">My usage</div>
+          		  <span>{ data.usage } Wh</span>
+          		</div>
 
-        		<div id="usage_sub">
-        			<div id="title_sub">Generating</div>
-        		  <span>300 Wh</span>
-        		</div>
+          		<div id="usage_sub">
+          			<div id="title_sub">Generating</div>
+          		  <span>{ data.generation } Wh</span>
+          		</div>
 
-        		<div id="usage_sub">
-        			<div id="title_sub">Demand</div>
-        		  <span>700 Wh</span>
-        		</div>
+          		<div id="usage_sub">
+          			<div id="title_sub">Demand</div>
+          		  <span>{ data.demand } Wh</span>
+          		</div>
 
-        		<div id="usage_sub">
-        			<div id="title_sub">Supply</div>
-        		  <span>0 Wh</span>
-        		</div>
-        	</div>
+          		<div id="usage_sub">
+          			<div id="title_sub">Supply</div>
+          		  <span>{ data.supply } Wh</span>
+          		</div>
+          	</div>
+          ) : "loading data" }
 
         </div>
       </div>
