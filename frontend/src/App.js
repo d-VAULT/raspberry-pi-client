@@ -81,22 +81,22 @@ class App extends Component {
 
         		<div id="usage_sub">
         			<div id="title_sub">My usage</div>
-        		  <span>1000</span>
+        		  <span>1000 Wh</span>
         		</div>
 
         		<div id="usage_sub">
         			<div id="title_sub">Generating</div>
-        		  <span>300</span>
+        		  <span>300 Wh</span>
         		</div>
 
         		<div id="usage_sub">
         			<div id="title_sub">Demand</div>
-        		  <span>700</span>
+        		  <span>700 Wh</span>
         		</div>
 
         		<div id="usage_sub">
         			<div id="title_sub">Supply</div>
-        		  <span>0</span>
+        		  <span>0 Wh</span>
         		</div>
         	</div>
 

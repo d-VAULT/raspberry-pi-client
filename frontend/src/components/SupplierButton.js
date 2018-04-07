@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const styles = {
   width: '200px',
-  paddingBottom: '20px',
+  paddingBottom: '10px',
 };
 
 class SupplierButton extends Component {

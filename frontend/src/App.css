@@ -1,6 +1,4 @@
 * {
-   /* width:800px; */
-   /* width:480px; */
    margin: 0px;
    padding: 0px;
 }
@@ -24,11 +22,10 @@ body a:hover {
 
 #wrap {
 	margin-right:auto;
-    margin-left:auto;
+  margin-left:auto;
 	width:800px;
 	height:480px;
 	background-color:#6699ff;
-
 }
 
 #title {
@@ -39,26 +36,28 @@ body a:hover {
 }
 
 #supplier {
-	width:200px;
-	height:420px;
+	width: 200px;
+	height: 380px;
 	float:left;
-	padding:20px;
-}
-
-#power, #usage {
-	width:480px;
-	float:left;
-	padding:20px;
+	padding: 20px;
 }
 
 #power {
-	height:140px;
-
+  width:480px;
+  height:140px;
+	float:left;
+	padding:20px;
+  padding-bottom: 0px;
 }
 
 #usage {
-	height:220px;
+  width:480px;
+  height:220px;
+	float:left;
+	padding:20px;
+  padding-bottom: 0px;
 }
+
 #usage_sub {
 	width:170px;
 	padding:10px;
@@ -73,12 +72,6 @@ body a:hover {
 	color:#fff;
 	font-size:20px;
 	text-align:left;
-
-}
-
-#image2 {
-  width:135px;
-  padding-right:20px;
 }
 
 #image3 {
