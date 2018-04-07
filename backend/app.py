@@ -1,7 +1,10 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
+from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
 
 app = Flask(__name__, static_folder='../frontend/build')
+
+meter = SmartMeter(SmartMeterProfile(True, False, False));
 
 # Serve React App
 @app.route('/', defaults={'path': ''})
@@ -18,4 +21,30 @@ def serve(path):
 # Serve API backend
 @app.route('/api/identity')
 def identity():
-    return 'I am Pi number 5'
+    return jsonify({
+        'succes': True,
+        'identity': "I am meter number 2",
+        'profile': {
+            'bulb': meter.profile.bulb,
+            'car': meter.profile.car,
+            'wind': meter.profile.wind
+        }
+    }), 200
+
+@app.route('/api/update-profile', methods=['POST'])
+def update_profile():
+    if not request.json or not 'car' in request.json:
+        abort(400)
+    meter.updateProfile(request.json['bulb'], request.json['car'], request.json['wind'])
+    return jsonify({
+        'succes': True,
+        'profile': {
+            'bulb': meter.profile.bulb,
+            'car': meter.profile.car,
+            'wind': meter.profile.wind
+        }
+    }), 200
+
+@app.route('/api/data')
+def data():
+    return meter.get_data().toJSON()
