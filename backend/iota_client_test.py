@@ -14,7 +14,6 @@ iota_api = client._api
 iota_address = iota_api.get_new_addresses(0, 1)['addresses'][0]
 address = str(iota_address)
 
-
 messages_count = 3
 messages = [{'value': 0, 'weight': i} for i in range(messages_count)]
 
@@ -22,6 +21,12 @@ for message in messages:
     json_message = json.dumps(message)
     client.send_transaction(address, json_message, 'NUON', 0)
 
+def get_address(seed, provider):
+    client = IotaClient(seed, provider)
+    iota_api = client._api
+
+    iota_address = iota_api.get_new_addresses(0, 1)['addresses'][0]
+    return str(iota_address)
 
 # Test
 
