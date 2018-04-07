@@ -4,7 +4,7 @@ from random import randint
 import config
 import time
 import json
-import pandas as pd
+from pandas import DataFrame
 from config import seed, provider
 
 class PushSum(object):
@@ -134,7 +134,7 @@ class PushSum(object):
 
     def receive(self):
         messages = self._iota_client.get_messages_from_address(self._address)
-        msg_df = pd.DataFrame(messages)
+        msg_df = DataFrame(messages)
         msg_df = self.parse_timing_attributes(msg_df)
         return msg_df
 
