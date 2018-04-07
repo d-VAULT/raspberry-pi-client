@@ -5,14 +5,16 @@ import config
 import time
 import json
 import pandas as pd
-
+from config import seed, provider
 
 class PushSum(object):
 
     """Helper for the push sum protocol"""
-    def __init__(self, value, iota_client, cycle_time_seconds=300, total_rounds=15):
-
-        self._iota_client = iota_client
+    def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15):
+        if not client:
+            self._iota_client = IotaClient(seed, provider)
+        else:
+            self._iota_client = client
         self._weight = 1
         self._value = value
         self._address = self._iota_client.address
@@ -152,8 +154,4 @@ class PushSum(object):
         return msg_df
 
 
-provider = 'http://node01.testnet.iotatoken.nl:16265'
-seed = '9MUBGYDJKKNBESRMZUGLZOWGXLIOBRSDIHKKSLUCQBISU9FP9IYVPEUQQKRDIYYBXOPSWVSJMLTYNWUUV'
-client = IotaClient(seed, provider)
-
-ps = PushSum(10, client)
+#ps = PushSum(10, client, total_rounds = 30)
