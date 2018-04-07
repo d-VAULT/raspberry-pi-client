@@ -10,6 +10,7 @@ class IotaClient(object):
         self._api = Iota(provider, seed)
         self._depth = depth
         self._min_weight_magnitude = min_weight_magnitude
+        self.address = self._get_address()
 
     @staticmethod
     def _compose_transaction(address, msg, tag, val):
@@ -21,6 +22,10 @@ class IotaClient(object):
                 value=val
             )
         return txn
+
+    def _get_address(self):
+        address = self._api.get_new_addresses(0,1)['addresses'][0]
+        return str(address)
 
     def _get_bundles(self):
         bundles = self._api.get_transfers()['bundles']
