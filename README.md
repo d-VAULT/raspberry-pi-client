@@ -14,9 +14,13 @@ Next up:
 
 Install [the Python](https://conda.io/docs/user-guide/install/index.html).
 
-Install dependencies:
+Install dependencies on Raspberry Pi:
 ```
-brew install libmpc mpfr gmp
+
+# brew install libmpc mpfr gmp
+
+sudo apt-get install python3-pandas
+
 pip install -r requirements.txt
 pip install pyota[ccurl]
 ```
