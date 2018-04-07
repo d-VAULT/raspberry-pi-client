@@ -121,7 +121,7 @@ class PushSum(object):
     def _get_round_index(self, round_id=None):
         if not round_id:
             round_id = self._get_round_id()
-        round_index = round_id%self.round_time_seconds
+        round_index = int(round_id%self.total_rounds)
         return round_index
 
     def get_round_messages(self, round_id):
