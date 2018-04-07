@@ -78,8 +78,8 @@ class PushSum(object):
             print("\nreceived:\n\n", prev_round_data_sum['value'],prev_round_data_sum['weight'])
 
             # add previous round data to internal data
-            self._value += prev_round_data_sum['value']
-            self._weight += prev_round_data_sum['weight']
+            self._value += prev_round_data_sum['value'] / 2
+            self._weight += prev_round_data_sum['weight'] / 2
 
         # print total
         print("\ncurrent values:\n\n",self._value, self._weight, self.get_total())
@@ -154,4 +154,4 @@ class PushSum(object):
         return msg_df
 
 
-#ps = PushSum(10, client, total_rounds = 30)
+ps = PushSum(value = 10, total_rounds = 30)
