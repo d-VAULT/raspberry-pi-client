@@ -1,3 +1,6 @@
 pyota==2.0.5
 phe==1.3.1
 pandas==0.22.0
+Flask==0.12.2
+netifaces==0.10.6
+APScheduler==3.5.1

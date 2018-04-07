@@ -2,6 +2,12 @@ import os
 import netifaces
 from flask import Flask, send_from_directory, request, jsonify
 from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
+import time
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+from push_sum import PushSum
 
 # Get LAN ip
 interfaces = netifaces.interfaces()
@@ -10,9 +16,26 @@ if 'wlan0' in interfaces:
 else:
     ip = "X"
 
-app = Flask(__name__, static_folder='../frontend/build')
+# ps = PushSum(110, total_rounds=30)
+#
+# def do_push_sum():
+#     print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+#     ps.iterate_round()
 
-meter = SmartMeter(SmartMeterProfile(True, False, False));
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(
+    func=do_push_sum,
+    trigger=IntervalTrigger(seconds=5),
+    id='do_push_sum',
+    name='Perform push sum work',
+    replace_existing=True)
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+
+meter = SmartMeter(SmartMeterProfile(True, False, False))
+
+app = Flask(__name__, static_folder='../frontend/build')
 
 # Serve React App
 @app.route('/', defaults={'path': ''})
