@@ -67,7 +67,9 @@ class PushSum(object):
         round_id = self._get_round_id()
         print("*** round index: ", round_index)
 
-        if round_index>0:
+        if round_index == self.total_rounds-1:
+            self.send_result_to_aggregator()
+        elif round_index>0:
             # half our weight and value
             self._weight *= 0.5
             self._value *= 0.5
