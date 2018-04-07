@@ -1,6 +1,14 @@
 import os
+import netifaces
 from flask import Flask, send_from_directory, request, jsonify
 from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
+
+# Get LAN ip
+interfaces = netifaces.interfaces()
+if 'wlan0' in interfaces:
+    ip = netifaces.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+else:
+    ip = "localhost"
 
 app = Flask(__name__, static_folder='../frontend/build')
 
@@ -23,7 +31,7 @@ def serve(path):
 def identity():
     return jsonify({
         'succes': True,
-        'identity': "I am meter number 2",
+        'identity': "I am meter " + ip,
         'profile': {
             'bulb': meter.profile.bulb,
             'car': meter.profile.car,
