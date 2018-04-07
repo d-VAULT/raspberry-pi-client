@@ -1,4 +1,4 @@
-# Raspberry Pi client
+# Raspberry Pi client [![BCH compliance](https://bettercodehub.com/edge/badge/Blockchaingers/raspberry-pi-client?branch=master)](https://bettercodehub.com/)
 
 ## Backend
 Performs a push sum algorithm via smart meters connected with the IOTA Tangle to determine the aggregate energy usage in a group belonging to an energy supplier.
