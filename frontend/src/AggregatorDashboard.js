@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+const sortNewestFirst = (recordA, recordB) => {
+  return recordA.timestamp < recordB.timestamp;
+};
+
 class AggregatorDashboard extends Component {
   constructor() {
     super();
@@ -14,7 +18,7 @@ class AggregatorDashboard extends Component {
   }
 
   startPolling() {
-    const pollTimerId = setInterval(this.poll, 1000, this);
+    const pollTimerId = setInterval(this.poll, 2000, this);
     this.setState({ pollTimerId });
   }
 
@@ -30,8 +34,36 @@ class AggregatorDashboard extends Component {
       .get('/api/aggregated-data')
       .then(response => response.data)
       .then(data => {
+        const dataWithCycleID = data.filter((item) => {
+          return item.json_message.cycle_id
+        })
+        const reportRecords = dataWithCycleID.reduce((result, item, i) => {
+          const cycleId = item.json_message.cycle_id;
+          const reportRecord = result.find((record) => { return record.cycleId === cycleId });
+          if (typeof reportRecord === 'undefined') {
+            result.push({
+              cycleId,
+              reports: [item],
+            });
+          } else {
+            reportRecord.reports.push(item);
+          }
+          return result;
+        }, []);
+        const viewData = reportRecords.map((record) => {
+          return {
+            cycleId: record.cycleId,
+            averageTotalUsage: Math.round(record.reports[0].json_message.total_energy_usage * 100) / 100,
+            numResults: record.reports.length,
+            timestamp: record.reports[0].timestamp,
+          }
+        }).sort(sortNewestFirst).slice(0,8);
+        // const mockData = [{
+        //   cycleId: 286798123,
+        //   averageTotalUsage: 1000,
+        // }]
         self.setState({
-          data
+          data: viewData
         })
       })
   }
@@ -61,33 +93,33 @@ class AggregatorDashboard extends Component {
                     </tr>
           				  <tr>
                       <td className="bold">Usage</td>
-                      <td>1000</td>
-                      <td>900</td>
-                      <td>1100</td>
+                      {
+                        data.map(record => <td>{ record.averageTotalUsage }</td>)
+                      }
                     </tr>
       				      <tr>
                       <td className="bold">Generation</td>
-                      <td>200</td>
-                      <td>150</td>
-                      <td>0</td>
+                      {
+                        data.map(record => <td> 0 </td>)
+                      }
                     </tr>
       				      <tr>
                       <td className="bold">Demand</td>
-                      <td>800</td>
-                      <td>750</td>
-                      <td>1100</td>
+                      {
+                        data.map(record => <td> 0 </td>)
+                      }
                     </tr>
       				      <tr>
                       <td className="bold">Supply</td>
-                      <td>0</td>
-                      <td>0</td>
-                      <td>0</td>
+                      {
+                        data.map(record => <td> 0 </td>)
+                      }
                     </tr>
       				      <tr>
                       <td className="bold">Real</td>
-                      <td>80%</td>
-                      <td>65%</td>
-                      <td>89%</td>
+                      {
+                        data.map(record => <td> { Math.round(record.numResults / 6 * 100 * 100 ) / 100 }% </td>)
+                      }
                     </tr>
                   </tbody>
         				</table>
