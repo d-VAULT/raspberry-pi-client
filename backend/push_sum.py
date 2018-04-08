@@ -83,7 +83,7 @@ class PushSum(object):
             self._value *= 0.5
 
             # collect all recieved data from previous round
-            prev_round_data_sum = ps.get_round_messages(round_id-1).sum()
+            prev_round_data_sum = self.get_round_messages(round_id-1).sum()
 
             print("\nreceived:\n",
                   "\nvalue:", round(prev_round_data_sum['value'],2),
