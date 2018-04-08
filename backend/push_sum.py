@@ -66,7 +66,8 @@ class PushSum(object):
     def send_result_to_aggregator(self):
         """Sends total result to aggregator's address"""
         total = self.get_total()
-        message = json.dumps({'total_energy_usage': total})
+        message = json.dumps({'total_energy_usage': total,
+                              'cycle_id': self._get_cycle_id()})
         tag = "AGGREGATED"
         iota_val = 0
 
