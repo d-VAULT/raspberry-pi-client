@@ -28,7 +28,10 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
 
     # poll local meter to get updated value:
     if not value:
-        value = meter.get_data().demand - meter.get_data().supply
+        demand = meter.get_data().demand
+        supply = meter.get_data().supply
+        value = abs(demand) + abs(supply) # this is just for testing
+        print("\n\nGOT NEW INITIAL VALUE FOR CYCLE: ", value, "\n\n")
 
     # report start of new cycle to console
     print("NEW CYCLE STARTED: ", start_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
@@ -88,8 +91,8 @@ meter = SmartMeter(SmartMeterProfile(*random_profile))
 
 # set push sum parameters a None value means updating from
 value = None
-total_rounds = 6
-cycle_time = 60
+total_rounds = 12
+cycle_time = 120
 
 # real start_time = start_date_cycle + N * cycle_time
 start_date_cycle = datetime(2018, 4, 8, 00, 00, 0)
