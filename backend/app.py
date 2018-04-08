@@ -5,6 +5,7 @@ from flask import Flask, send_from_directory, request, jsonify
 from iota_client import IotaClient
 from push_sum import PushSum
 from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
+from config import my_public_key, seed
 import atexit
 import config
 import json
@@ -20,6 +21,9 @@ if 'wlan0' in interfaces:
 else:
     ip = "X"
 
+# Get my identity
+print("my public key is: ", my_public_key)
+print("my seed is ", seed)
 
 # define the triggering of rounds in one push sum cycle
 def do_push_sum_cycle(value, total_rounds, cycle_time):

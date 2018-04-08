@@ -1,6 +1,5 @@
 import os
 
-from iota_client import IotaClient
 from iota import Iota
 
 seed = os.environ['SEED']
@@ -8,6 +7,7 @@ seed = os.environ['SEED']
 aggregator_address = 'XBC9JOMDXVRTS9VRLULWYBHNGK9BMYMQKKZFDNFFHTJCNCT9LQJQQIBF9PEAUZVRPCRDMXFONZLSYBVJA'
 
 provider = 'http://node01.testnet.iotatoken.nl:16265'
+#provider = 'http://node06.iotatoken.nl:14265'
 
 ruud = {"seed": "",
         "address": '',
@@ -83,4 +83,12 @@ pi_timen["address"] = get_addres_iota(provider, seed6)
 pi_erwin["address"] = get_addres_iota(provider, seed7)
 
 # define participants
-participants = [ruud, erwin, timen]
+participants = [ruud, erwin, timen, pi_ruud, pi_erwin, pi_timen]
+
+# check who I am with seed from env seed = os.environ['SEED']
+def who_am_I(seed):
+    pubkey = [part["public_key"] for part in participants if part["seed"]==seed]
+    return pubkey
+
+# get my public key
+my_public_key = who_am_I(seed)
