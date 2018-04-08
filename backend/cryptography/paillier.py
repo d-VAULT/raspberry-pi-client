@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from phe import paillier
+from config import participants
 
 
 class Paillier(object):
@@ -8,7 +9,6 @@ class Paillier(object):
     def __init__(self, public_key, private_key):
         if not public_key and not private_key:
             public_key, private_key = paillier.generate_paillier_keypair()
-        self.paillier = paillier
         self.public_key = public_key
         self._private_key = private_key
 
@@ -46,7 +46,7 @@ class Paillier(object):
 
     @staticmethod
     def _public_key_to_dict(public_key):
-        public_key_dict = {'g': public_key.g, 'n': public_key.n}
+        public_key_dict = {'n': public_key.n}
         return public_key_dict
 
     @staticmethod
@@ -68,3 +68,6 @@ e = p.encrypt(52)
 print("ciphertext: \n\n", e.ciphertext())
 d = p.decrypt(e)
 print("\ndecoded: ", d)
+
+for i in range(len(participants)):
+    print("\n\n\n\nkeypair_%s ="%i, Paillier(None, None).keypair_to_dict())
