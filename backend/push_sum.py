@@ -93,16 +93,20 @@ class PushSum(object):
             self._value *= 0.5
 
             # collect all recieved data from previous round
-            prev_round_data = self.get_round_messages(round_id-1)
-            if self.encrypted:
-                prev_round_data['value'].apply(lambda x: self._paillier.decryptcipher(x))
-                prev_round_data['weight'].apply(lambda x: self._paillier.decryptcipher(x))
+            try:
+                prev_round_data = self.get_round_messages(round_id-1)
+                if self.encrypted:
+                    prev_round_data['value'].apply(lambda x: self._paillier.decryptcipher(x))
+                    prev_round_data['weight'].apply(lambda x: self._paillier.decryptcipher(x))
 
-            prev_round_data_sum = prev_round_data.sum()
+                prev_round_data_sum = prev_round_data.sum()
 
-            print("\nreceived:\n",
-                  "\nvalue:", round(prev_round_data_sum['value'],2),
-                  "\nweight:", round(prev_round_data_sum['weight'],2))
+                print("\nreceived:\n",
+                      "\nvalue:", round(prev_round_data_sum['value'],2),
+                      "\nweight:", round(prev_round_data_sum['weight'],2))
+
+            except:
+                pass
 
             # add previous round data to internal data
             self._value += prev_round_data_sum['value'] * 0.5
