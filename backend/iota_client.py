@@ -6,7 +6,7 @@ from iota import Iota, Address, ProposedTransaction, Tag, TryteString, Transacti
 
 class IotaClient(object):
     """Python IOTA client wrapper"""
-    def __init__(self, seed, provider, depth=5, min_weight_magnitude=9):
+    def __init__(self, seed, provider, depth=5, min_weight_magnitude=14):
         self._api = Iota(provider, seed)
         self._depth = depth
         self._min_weight_magnitude = min_weight_magnitude

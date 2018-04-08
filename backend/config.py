@@ -1,13 +1,16 @@
 import os
 
 from iota import Iota
+import random
 
 seed = os.environ['SEED']
 
 aggregator_address = 'XBC9JOMDXVRTS9VRLULWYBHNGK9BMYMQKKZFDNFFHTJCNCT9LQJQQIBF9PEAUZVRPCRDMXFONZLSYBVJA'
 
-provider = 'http://node01.testnet.iotatoken.nl:16265'
-#provider = 'http://node06.iotatoken.nl:14265'
+#provider = 'http://node01.testnet.iotatoken.nl:16265'
+idx = random.randint(0,2)
+providers = ['http://node02.iotatoken.nl:14265', 'http://node04.iotatoken.nl:14265', 'http://node06.iotatoken.nl:14265']
+provider = providers[idx]
 
 ruud = {"seed": "",
         "address": '',
