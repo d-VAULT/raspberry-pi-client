@@ -20,6 +20,10 @@ body a:hover {
 	text-decoration: none;
 }
 
+td {
+  padding: 10px;
+}
+
 #wrap {
 	margin-right:auto;
   margin-left:auto;
