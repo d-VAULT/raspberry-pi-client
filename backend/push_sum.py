@@ -64,7 +64,7 @@ class PushSum(object):
             iota_val)
 
         # print aggregated value
-        print("CYCLE COMPLETED SUCCESSFULLY\nAGGREGATED TOTAL: ", total)
+        print("\n\nCYCLE COMPLETED SUCCESSFULLY\nAGGREGATED TOTAL: ", total, "\n\n")
 
     def iterate_round(self, tag=None):
         round_index = self._get_round_index()
@@ -90,16 +90,18 @@ class PushSum(object):
             self._weight += prev_round_data_sum['weight'] * 0.5
 
         # print total
-        print("\ncurrent values:\n\n",
-              self._value,
-              self._weight,
-              self.get_total())
+        print("\ncurrent values:\n",
+              "\nvalue:", round(self._value, 2),
+              "\nvalue:", round(self._weight,2),
+              "\nresult:", round(self.get_total(),2))
 
         # select random group member for sending current value pair
         member = self.get_random_group_member()
 
         # print public key as a reference for testing
-        print("sending to: ", member.public_key)
+        print("\n*** composing encrypting data",
+              "\n*** sending homomorphic encrypted data to: ",
+              member.public_key, "\n")
 
         # compose mesage for selected group member
         message = self.make_message()

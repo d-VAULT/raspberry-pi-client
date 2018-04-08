@@ -66,7 +66,7 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
 
 # define the triggering of cycles
 def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
-    print("CYCLE SCHEDULER STARTED: ", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    print("\nCYCLE SCHEDULER STARTED: ", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
     # initialize scheduler and add job
     scheduler = BackgroundScheduler()
