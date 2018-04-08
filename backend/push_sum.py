@@ -12,7 +12,7 @@ from config import seed, provider, participants
 class PushSum(object):
     """Helper for the push sum protocol"""
 
-    def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15, encrypted=False):
+    def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15):
         if not client:
             self._iota_client = IotaClient(seed, provider)
         else:
@@ -21,7 +21,7 @@ class PushSum(object):
         self._value = float(value)
         self._address = self._iota_client.address
         self._paillier = Paillier(None,None)
-        self.encrypted = encrypted
+        self.encrypted = False
         self.group_members = self.get_group_members()
         self.group_count = len(self.group_members)
         self.cycle_time_seconds = cycle_time_seconds
