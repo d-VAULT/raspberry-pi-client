@@ -38,7 +38,11 @@ class PushSum(object):
 
     def get_random_group_member(self):
         idx = randint(0, self.group_count-1)
-        return self.group_members[idx]
+        member = self.group_members[idx]
+        # get new member if member is self
+        if member.address == self._address:
+            member = self.get_random_group_member()
+        return member
 
     def make_message(self):
         """Creates a JSON message of our current value and weight"""
@@ -81,9 +85,9 @@ class PushSum(object):
             # collect all recieved data from previous round
             prev_round_data_sum = ps.get_round_messages(round_id-1).sum()
 
-            print("\nreceived:\n\n",
-                  prev_round_data_sum['value'],
-                  prev_round_data_sum['weight'])
+            print("\nreceived:\n",
+                  "\nvalue:", round(prev_round_data_sum['value'],2),
+                  "\nweight:", round(prev_round_data_sum['weight'],2))
 
             # add previous round data to internal data
             self._value += prev_round_data_sum['value'] * 0.5
@@ -92,7 +96,7 @@ class PushSum(object):
         # print total
         print("\ncurrent values:\n",
               "\nvalue:", round(self._value, 2),
-              "\nvalue:", round(self._weight,2),
+              "\nweight:", round(self._weight,2),
               "\nresult:", round(self.get_total(),2))
 
         # select random group member for sending current value pair
@@ -105,13 +109,13 @@ class PushSum(object):
         message = self.make_message()
 
         # for backend demo purposes
-        print("\n*** composing message")
+        print("*** composing message")
 
         # send message containing value pair to selected group member
         self._iota_client.send_transaction(member.address, message, "NUON", 0)
 
         # print public key as a reference for testing
-        print("\n*** sent homomorphic encrypted data to: ",
+        print("*** sent homomorphic encrypted data to: ",
               member.public_key, "\n")
 
     def _get_cycle_id(self, timestamp=None):
