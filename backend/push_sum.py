@@ -99,7 +99,7 @@ class PushSum(object):
         member = self.get_random_group_member()
 
         # print public key as a reference for testing
-        print(member.public_key)
+        print("sending to: ", member.public_key)
 
         # compose mesage for selected group member
         message = self.make_message()

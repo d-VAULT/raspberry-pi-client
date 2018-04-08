@@ -19,7 +19,7 @@ class Group:
 
         # Hard coded initially, group members can later be retrieved on public
         # MAM address of the energy supplier
-        return [GroupMember(ruud_address, "x"), GroupMember(timen_address, "y"), GroupMember(erwin_address, "z")]
+        return [GroupMember(ruud_address, "ruud"), GroupMember(timen_address, "timen"), GroupMember(erwin_address, "erwin")]
 
 
 ruud_seed = "9MUBGYDJKKNBESRMZUGLZOWGXLIOBRSDIHKKSLUCQBISU9FP9IYVPEUQQKRDIYYBXOPSWVSJMLTYNWUUV"
