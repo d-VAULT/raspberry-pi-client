@@ -7,9 +7,10 @@ import json
 from pandas import DataFrame
 from config import seed, provider
 
-class PushSum(object):
 
+class PushSum(object):
     """Helper for the push sum protocol"""
+
     def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15):
         if not client:
             self._iota_client = IotaClient(seed, provider)
@@ -63,16 +64,16 @@ class PushSum(object):
             iota_val)
 
         # print aggregated value
-        print("CYCLE COMPLETED SUCCESFULLY\nAGGREGATED TOTAL: ", total)
+        print("CYCLE COMPLETED SUCCESSFULLY\nAGGREGATED TOTAL: ", total)
 
-    def iterate_round(self, tag = None):
+    def iterate_round(self, tag=None):
         round_index = self._get_round_index()
         round_id = self._get_round_id()
         print("*** round index: ", round_index)
 
         if round_index == self.total_rounds-1:
             self.send_result_to_aggregator()
-        elif round_index>0:
+        elif round_index > 0:
             # half our weight and value
             self._weight *= 0.5
             self._value *= 0.5
@@ -80,14 +81,19 @@ class PushSum(object):
             # collect all recieved data from previous round
             prev_round_data_sum = ps.get_round_messages(round_id-1).sum()
 
-            print("\nreceived:\n\n", prev_round_data_sum['value'],prev_round_data_sum['weight'])
+            print("\nreceived:\n\n",
+                  prev_round_data_sum['value'],
+                  prev_round_data_sum['weight'])
 
             # add previous round data to internal data
             self._value += prev_round_data_sum['value'] * 0.5
             self._weight += prev_round_data_sum['weight'] * 0.5
 
         # print total
-        print("\ncurrent values:\n\n",self._value, self._weight, self.get_total())
+        print("\ncurrent values:\n\n",
+              self._value,
+              self._weight,
+              self.get_total())
 
         # select random group member for sending current value pair
         member = self.get_random_group_member()
@@ -110,7 +116,7 @@ class PushSum(object):
     def _get_cycle_time(self, timestamp=None):
         if not timestamp:
             timestamp = int(time.time())
-        round_time = int(timestamp)%self.cycle_time_seconds
+        round_time = int(timestamp) % self.cycle_time_seconds
         return round_time
 
     def _get_round_id(self, timestamp=None):
@@ -122,13 +128,13 @@ class PushSum(object):
     def _get_round_time(self, timestamp=None):
         if not timestamp:
             timestamp = int(time.time())
-        round_time = int(timestamp%self.round_time_seconds)
+        round_time = int(timestamp % self.round_time_seconds)
         return round_time
 
     def _get_round_index(self, round_id=None):
         if not round_id:
             round_id = self._get_round_id()
-        round_index = int(round_id%self.total_rounds)
+        round_index = int(round_id % self.total_rounds)
         return round_index
 
     def get_round_messages(self, round_id):
@@ -159,4 +165,4 @@ class PushSum(object):
         return msg_df
 
 
-ps = PushSum(value = 10, total_rounds = 30)
+ps = PushSum(value=10, total_rounds=30)
