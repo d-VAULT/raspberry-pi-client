@@ -24,6 +24,10 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
     start_date_sum = datetime.now()
     end_date_sum = start_date_sum + timedelta(seconds=cycle_time - 2)
 
+    # hard code local meter to get updated value:
+    if not value:
+        value = meter.get_data().demand - meter.get_data().supply
+
     # report start of new cycle to console
     print("NEW CYCLE STARTED: ", start_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
     print("CYCLE WILL END AT: ", end_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
@@ -77,9 +81,9 @@ def start_clocked_cycles(start_date_cycle, value, total_rounds, cycle_time):
 # set random profile of meter and get value
 random_profile = [bool(random.getrandbits(i)) for i in [1, 1, 1]]
 meter = SmartMeter(SmartMeterProfile(*random_profile))
-value = meter.get_data().demand - meter.get_data().supply
 
-# set push sum parameters
+# set push sum parameters a None value means updating from
+value = None
 total_rounds = 30
 cycle_time = 300
 
