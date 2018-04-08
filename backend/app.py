@@ -57,6 +57,7 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
     scheduler.start()
     scheduler.add_job(
         func=do_push_sum,
+        max_instances=4,
         misfire_grace_time = int(cycle_time/total_rounds)-1,
         trigger=IntervalTrigger(start_date=start_date_sum,
                                 seconds=round_time_seconds,
@@ -78,6 +79,7 @@ def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
     scheduler.start()
     scheduler.add_job(
         func=do_push_sum_cycle,
+        max_instances=4,
         args=[value, total_rounds, cycle_time],
         misfire_grace_time = int(cycle_time/total_rounds)-1,
         trigger=IntervalTrigger(start_date=start_date_cycle,
