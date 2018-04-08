@@ -21,10 +21,10 @@ else:
 
 # define the triggering of rounds in one push sum cycle
 def do_push_sum_cycle(value, total_rounds, cycle_time):
-    start_date_sum = datetime.now()
-    end_date_sum = start_date_sum + timedelta(seconds=cycle_time - 2)
+    start_date_sum = datetime.now() + timedelta(seconds=1)
+    end_date_sum = start_date_sum + timedelta(seconds=(cycle_time - 3))
 
-    # hard code local meter to get updated value:
+    # poll local meter to get updated value:
     if not value:
         value = meter.get_data().demand - meter.get_data().supply
 
@@ -59,7 +59,7 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
 
 
 # define the triggering of cycles
-def start_clocked_cycles(start_date_cycle, value, total_rounds, cycle_time):
+def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
     print("CYCLE SCHEDULER STARTED: ", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
     # initialize scheduler and add job
@@ -88,10 +88,10 @@ total_rounds = 30
 cycle_time = 300
 
 # real start_time = start_date_cycle + N * cycle_time
-start_date_cycle = datetime(2018, 4, 8, 00, 00, 1)
+start_date_cycle = datetime(2018, 4, 8, 00, 00, 0)
 
 # start the clocked cycles scheduler
-start_clocked_cycles(start_date_cycle, value, total_rounds, cycle_time)
+start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time)
 
 # initialise the Flask app
 app = Flask(__name__, static_folder='../frontend/build')
