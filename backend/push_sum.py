@@ -139,14 +139,14 @@ class PushSum(object):
     def _get_cycle_id(self, timestamp=None):
         if not timestamp:
             timestamp = int(time.time())
-        round_id = int(timestamp/self.cycle_time_seconds)-5077050
-        return round_id
+        cycle_id = int(timestamp/self.cycle_time_seconds)-5077050
+        return cycle_id
 
     def _get_cycle_time(self, timestamp=None):
         if not timestamp:
             timestamp = int(time.time())
-        round_time = int(timestamp) % self.cycle_time_seconds
-        return round_time
+        cycle_time = int(timestamp) % self.cycle_time_seconds
+        return cycle_time
 
     def _get_round_id(self, timestamp=None):
         if not timestamp:
