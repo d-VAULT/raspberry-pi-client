@@ -49,6 +49,7 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
     scheduler.start()
     scheduler.add_job(
         func=do_push_sum,
+        misfire_grace_time = 8,
         trigger=IntervalTrigger(start_date=start_date_sum,
                                 seconds=round_time_seconds,
                                 end_date=end_date_sum),
@@ -70,6 +71,7 @@ def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
     scheduler.add_job(
         func=do_push_sum_cycle,
         args=[value, total_rounds, cycle_time],
+        misfire_grace_time = 8,
         trigger=IntervalTrigger(start_date=start_date_cycle,
                                 seconds=cycle_time),
         id='start_new_cycle',
@@ -86,7 +88,7 @@ meter = SmartMeter(SmartMeterProfile(*random_profile))
 
 # set push sum parameters a None value means updating from
 value = None
-total_rounds = 30
+total_rounds = 20
 cycle_time = 300
 
 # real start_time = start_date_cycle + N * cycle_time
