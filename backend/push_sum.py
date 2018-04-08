@@ -98,16 +98,21 @@ class PushSum(object):
         # select random group member for sending current value pair
         member = self.get_random_group_member()
 
-        # print public key as a reference for testing
-        print("\n*** composing encrypting data",
-              "\n*** sending homomorphic encrypted data to: ",
-              member.public_key, "\n")
+        # for backend demo purposes
+        print("\n*** encrypting data")
 
         # compose mesage for selected group member
         message = self.make_message()
 
+        # for backend demo purposes
+        print("\n*** composing message")
+
         # send message containing value pair to selected group member
         self._iota_client.send_transaction(member.address, message, "NUON", 0)
+
+        # print public key as a reference for testing
+        print("\n*** sent homomorphic encrypted data to: ",
+              member.public_key, "\n")
 
     def _get_cycle_id(self, timestamp=None):
         if not timestamp:
