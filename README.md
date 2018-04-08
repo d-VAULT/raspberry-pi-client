@@ -25,6 +25,11 @@ pip install -r requirements.txt
 pip install pyota[ccurl]
 ```
 
+Set time zone to Europe/Amsterdam:
+```
+sudo dpkg-reconfigure tzdata
+```
+
 Environment variables:
 
 Generate a seed
