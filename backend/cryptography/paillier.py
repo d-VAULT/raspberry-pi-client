@@ -13,14 +13,22 @@ class Paillier(object):
         self._private_key = private_key
 
     def encrypt(self, value, public_key=None):
-        if public_key==None:
+        if not public_key:
             public_key=self.public_key
         return public_key.encrypt(value)
 
     def decrypt(self, value, private_key=None):
-        if private_key==None:
+        if not private_key:
             private_key=self._private_key
         return private_key.decrypt(value)
+
+    def decryptcipher(self, cipher, public_key=None, private_key=None):
+        if not public_key:
+            public_key=self.public_key
+        if not private_key:
+            private_key=self._private_key
+        value = paillier.EncryptedNumber(public_key, cipher)
+        return self.decrypt(value, private_key)
 
     @classmethod
     def from_keypair_dict(cls, keypair_dict):
@@ -63,11 +71,6 @@ class Paillier(object):
     def _public_key_from_dict(public_key_dict):
         return paillier.PaillierPublicKey(public_key_dict['n'])
 
-p = Paillier(None, None)
-e = p.encrypt(52)
-print("ciphertext: \n\n", e.ciphertext())
-d = p.decrypt(e)
-print("\ndecoded: ", d)
 
-for i in range(len(participants)):
-    print("\n\n\n\nkeypair_%s ="%i, Paillier(None, None).keypair_to_dict())
+#for i in range(len(participants)):
+#    print("\n\n\n\nkeypair_%s ="%i, Paillier(None, None).keypair_to_dict())

@@ -1,6 +1,7 @@
 from energy_supplier.group import Group
 from iota_client import IotaClient
 from random import randint
+from cryptography.paillier import Paillier
 import config
 import time
 import json
@@ -11,7 +12,7 @@ from config import seed, provider, participants
 class PushSum(object):
     """Helper for the push sum protocol"""
 
-    def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15):
+    def __init__(self, value, client=None, cycle_time_seconds=300, total_rounds=15, encrypted=False):
         if not client:
             self._iota_client = IotaClient(seed, provider)
         else:
@@ -19,6 +20,8 @@ class PushSum(object):
         self._weight = float(1)
         self._value = float(value)
         self._address = self._iota_client.address
+        self._paillier = Paillier(None,None)
+        self.encrypted = encrypted
         self.group_members = self.get_group_members()
         self.group_count = len(self.group_members)
         self.cycle_time_seconds = cycle_time_seconds
@@ -44,10 +47,16 @@ class PushSum(object):
             member = self.get_random_group_member()
         return member
 
-    def make_message(self):
+    def make_message(self, public_key=None):
         """Creates a JSON message of our current value and weight"""
-        message = {'value': self._value, 'weight': self._weight}
-
+        value = self._value
+        weight = self._weight
+        if self.encrypted: # encryption with public key should go here
+            if not public_key:
+                public_key = self._paillier.public_key
+            value = public_key.encrypt(value).ciphertext()
+            weight = public_key.encrypt(weight).ciphertext()
+        message = {'value': value, 'weight': weight}
         return json.dumps(message)
 
     def get_total(self):
@@ -83,7 +92,12 @@ class PushSum(object):
             self._value *= 0.5
 
             # collect all recieved data from previous round
-            prev_round_data_sum = self.get_round_messages(round_id-1).sum()
+            prev_round_data = self.get_round_messages(round_id-1)
+            if self.encrypted:
+                prev_round_data['value'].apply(lambda x: self._paillier.decryptcipher(x))
+                prev_round_data['weight'].apply(lambda x: self._paillier.decryptcipher(x))
+
+            prev_round_data_sum = prev_round_data.sum()
 
             print("\nreceived:\n",
                   "\nvalue:", round(prev_round_data_sum['value'],2),
@@ -112,11 +126,14 @@ class PushSum(object):
         print("*** composing message")
 
         # send message containing value pair to selected group member
-        self._iota_client.send_transaction(member.address, message, "NUON", 0)
+        self.send_message(member.address, message, tag="ENCRYPTED")
 
         # print public key as a reference for testing
         print("*** sent homomorphic encrypted data to: ",
               member.public_key, "\n")
+
+    def send_message(self, address, message, tag):
+        self._iota_client.send_transaction(address, message, tag, 0)
 
     def _get_cycle_id(self, timestamp=None):
         if not timestamp:
@@ -174,6 +191,3 @@ class PushSum(object):
         msg_df["round_index"] = msg_df["round_id"].apply(lambda t: self._get_round_index(t))
         del msg_df["timestamp"]
         return msg_df
-
-
-ps = PushSum(value=10, total_rounds=30)

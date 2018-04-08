@@ -26,3 +26,16 @@ def test_get_keys():
 
     assert (public == p.public_key)
     assert (private == p._private_key)
+
+def test_encryption_decryption():
+    p = Paillier(None, None)
+    e = p.encrypt(52)
+    c = e.ciphertext()
+    print("ciphertext: \n\n", c)
+
+    d = p.decrypt(e)
+    print("\ndecoded: ", d)
+
+    dc = p.decryptcipher(c)
+    print("\ndecoded: ", dc)
+    assert (d==dc)
