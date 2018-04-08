@@ -1,15 +1,17 @@
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+from datetime import datetime, timedelta
+from flask import Flask, send_from_directory, request, jsonify
+from iota_client import IotaClient
+from push_sum import PushSum
+from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
 import atexit
+import config
+import json
 import netifaces
 import os
 import random
 import time
-from datetime import datetime, timedelta
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.interval import IntervalTrigger
-from flask import Flask, send_from_directory, request, jsonify
-from push_sum import PushSum
-from smart_meter.smart_meter import SmartMeter, SmartMeterProfile
 
 # Get LAN ip
 interfaces = netifaces.interfaces()
@@ -111,6 +113,7 @@ def serve(path):
 
 
 # Serve API backend
+
 @app.route('/api/identity')
 def identity():
     return jsonify({
@@ -142,3 +145,15 @@ def update_profile():
 @app.route('/api/data')
 def data():
     return meter.get_data().toJSON()
+
+
+# Energy supplier overall usage app
+# Note: reuses this backend now, can later be moved to own application
+
+@app.route('/api/aggregated-data')
+def aggregated_data():
+    client = IotaClient(config.seed, config.provider)
+    messages = client.get_messages_from_address(
+        config.aggregator_address)
+
+    return json.dumps(messages)
