@@ -4,7 +4,7 @@ from iota_client import IotaClient
 import config
 
 provider = 'http://node01.testnet.iotatoken.nl:16265'
-test_seed = "MPGFTSGNYSEYSCYQCXTTNWALGVKLSIYTICRRCIJBPYITUENBQESGBYOCSVGBUOWUTKLVUOEIDSZAYNXIA"
+test_seed = "PXTWQRHDQLJTELGGTNUKWRSQDLMPBANCICXBZRFF9MFGWXAZJCCJMSK9XOVROC9QFEWRZHMJALTORNDZQ"
 client = IotaClient(test_seed, provider)
 
 
