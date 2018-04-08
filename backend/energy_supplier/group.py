@@ -1,27 +1,21 @@
 from energy_supplier.group_member import GroupMember
+from config import participants
 
-
-class Group:
+class Group(object):
     """
     The addresses and public keys of the group that belong to the same energy
     supplier.
     """
 
-    def __init__(self):
+    def __init__(self, participants):
+        self.participants = participants
         self.group_members = self.get_group()
 
     def get_group(self):
-        """Get group via IOTA"""
+        """Get group from participants list"""
+        participants = self.participants
+        # group = [GroupMember(ruud_address, "ruud"), GroupMember(timen_address, "timen"), GroupMember(erwin_address, "erwin")]
+        group = [GroupMember(member['address'], member['public_key']) for member in participants]
+        return group
 
-        ruud_address = 'IWDLSZGXIJGGRIJZQAZWFEMODVB9SETPJQWCVHNOLITEWHQAFX9DVLPFHDXHA9COZUOMRNACKURH9SXEW'
-        timen_address = 'KIKDCECULCMJUUJXRUVSAJOLWYBJOGKQMAPQUDKVBOOLDATGSUZVDMTWBDHWAHWMCGJMCTUPPTHMZZETD'
-        erwin_address = 'EZSHEAPSJHPHRTELZOSEVKHZL9GEIJIXHT9KZWBO9SXEYLEOIDJRAGGKRPKUEYEHXGAHPLYUY9FOWEGPY'
-
-        # Hard coded initially, group members can later be retrieved on public
-        # MAM address of the energy supplier
-        return [GroupMember(ruud_address, "ruud"), GroupMember(timen_address, "timen"), GroupMember(erwin_address, "erwin")]
-
-
-ruud_seed = "9MUBGYDJKKNBESRMZUGLZOWGXLIOBRSDIHKKSLUCQBISU9FP9IYVPEUQQKRDIYYBXOPSWVSJMLTYNWUUV"
-erwin_seed = "9HVUBRGXMBYKHAZSDNNXODDJAFAGY9ERJRSHXYJQIESILM9V9KUFTVGODGNNETGGJQIKTRYGR9QDYXBRN"
-timen_seed = "ASBYXEJZTONTYNBSAFQRTHDUSCNBWZCYBSAEWJNMR9IVAULQYVVYG9IULBURYWYWPTEZOTI9VYOCGJTTT"
+g = Group(participants)

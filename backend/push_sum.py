@@ -5,7 +5,7 @@ import config
 import time
 import json
 from pandas import DataFrame
-from config import seed, provider
+from config import seed, provider, participants
 
 
 class PushSum(object):
@@ -33,7 +33,7 @@ class PushSum(object):
 
     @staticmethod
     def get_group_members():
-        group = Group()
+        group = Group(participants)
         return group.group_members
 
     def get_random_group_member(self):
