@@ -105,12 +105,12 @@ class PushSum(object):
                       "\nvalue:", round(prev_round_data_sum['value'],2),
                       "\nweight:", round(prev_round_data_sum['weight'],2))
 
+                # add previous round data to internal data
+                self._value += prev_round_data_sum['value'] * 0.5
+                self._weight += prev_round_data_sum['weight'] * 0.5
+
             except:
                 pass
-
-            # add previous round data to internal data
-            self._value += prev_round_data_sum['value'] * 0.5
-            self._weight += prev_round_data_sum['weight'] * 0.5
 
         # print total
         print("\ncurrent values:\n",

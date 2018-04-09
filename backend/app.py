@@ -14,6 +14,16 @@ import os
 import random
 import time
 
+# set random profile of meter and get value
+random_profile = [bool(random.getrandbits(i)) for i in [1, 1, 1]]
+meter = SmartMeter(SmartMeterProfile(*random_profile))
+
+# set push sum parameters a None value means updating from
+value = None
+round_time = 60
+total_rounds = 15
+cycle_time = total_rounds * round_time
+
 # Get LAN ip
 interfaces = netifaces.interfaces()
 if 'wlan0' in interfaces:
@@ -28,9 +38,6 @@ print("my provider is ", provider)
 
 # define the triggering of rounds in one push sum cycle
 def do_push_sum_cycle(value, total_rounds, cycle_time):
-    start_date_sum = datetime.now() + timedelta(seconds=1)
-    end_date_sum = start_date_sum + timedelta(seconds=(cycle_time - 3))
-
     # poll local meter to get updated value:
     if not value:
         demand = meter.get_data().demand
@@ -38,15 +45,18 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
         value = abs(demand) + abs(supply) # this is just for testing
         print("\n\nGOT NEW INITIAL VALUE FOR CYCLE: ", value, "\n\n")
 
-    # report start of new cycle to console
-    print("NEW CYCLE STARTED: ", start_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-    print("CYCLE WILL END AT: ", end_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-
     # initialise push sum object
     ps = PushSum(value,
                  total_rounds=total_rounds,
                  cycle_time_seconds=cycle_time)
     round_time_seconds = ps.round_time_seconds
+
+    # determine and report start of new cycle to console
+    start_date_sum = datetime.now() + timedelta(seconds=1)
+    end_date_sum = start_date_sum + timedelta(seconds=(cycle_time - 3))
+
+    print("NEW CYCLE STARTED: ", start_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    print("CYCLE WILL END AT: ", end_date_sum.strftime("%A, %d. %B %Y %I:%M:%S %p"))
 
     # define triggering function and report to console
     def do_push_sum():
@@ -57,8 +67,8 @@ def do_push_sum_cycle(value, total_rounds, cycle_time):
     scheduler.start()
     scheduler.add_job(
         func=do_push_sum,
-        max_instances=4,
-        misfire_grace_time = int(cycle_time/total_rounds)-1,
+        max_instances=2,
+        misfire_grace_time = int(cycle_time/total_rounds/2),
         trigger=IntervalTrigger(start_date=start_date_sum,
                                 seconds=round_time_seconds,
                                 end_date=end_date_sum),
@@ -79,9 +89,9 @@ def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
     scheduler.start()
     scheduler.add_job(
         func=do_push_sum_cycle,
-        max_instances=4,
+        max_instances=2,
         args=[value, total_rounds, cycle_time],
-        misfire_grace_time = int(cycle_time/total_rounds)-1,
+        misfire_grace_time = int(cycle_time/4),
         trigger=IntervalTrigger(start_date=start_date_cycle,
                                 seconds=cycle_time),
         id='start_new_cycle',
@@ -91,15 +101,6 @@ def start_cycle_scheduler(start_date_cycle, value, total_rounds, cycle_time):
     # Shut down the scheduler when exiting the app
     atexit.register(lambda: scheduler.shutdown())
 
-
-# set random profile of meter and get value
-random_profile = [bool(random.getrandbits(i)) for i in [1, 1, 1]]
-meter = SmartMeter(SmartMeterProfile(*random_profile))
-
-# set push sum parameters a None value means updating from
-value = None
-total_rounds = 12
-cycle_time = 120
 
 # real start_time = start_date_cycle + N * cycle_time
 start_date_cycle = datetime(2018, 4, 8, 00, 00, 0)
