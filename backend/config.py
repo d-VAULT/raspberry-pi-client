@@ -83,7 +83,6 @@ def get_addres_iota(provider, seed):
     return str(address)
 
 ruud["address"] = get_addres_iota(provider, seed0)
-ruud["oelfier"] = get_addres_iota(provider, seed0)
 erwin["address"] = get_addres_iota(provider, seed1)
 timen["address"] = get_addres_iota(provider, seed2)
 pi_oelfier["address"] = get_addres_iota(provider, seed3)
@@ -91,6 +90,7 @@ pi_dennis["address"] = get_addres_iota(provider, seed4)
 pi_ruud["address"] = get_addres_iota(provider, seed5)
 pi_timen["address"] = get_addres_iota(provider, seed6)
 pi_erwin["address"] = get_addres_iota(provider, seed7)
+oelfier["address"] = get_addres_iota(provider, seed8)
 
 # define participants
 participants = [ruud, erwin, timen, oelfier, pi_ruud, pi_erwin, pi_timen]
