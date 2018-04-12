@@ -17,6 +17,11 @@ ruud = {"seed": "",
         "public_key": "public key ruud"
         }
 
+oelfier = {"seed": "",
+           "address": '',
+           "public_key": "public key ruud"
+           }
+
 erwin = {"seed": "",
          "address": '',
          "public_key": "public key erwin"
@@ -71,12 +76,14 @@ pi_dennis["seed"] = seed4
 pi_ruud["seed"] = seed5
 pi_timen["seed"] = seed6
 pi_erwin["seed"] = seed7
+oelfier["seed"] = seed8
 
 def get_addres_iota(provider, seed):
     address = Iota(provider, seed).get_new_addresses(0, 1)['addresses'][0]
     return str(address)
 
 ruud["address"] = get_addres_iota(provider, seed0)
+ruud["oelfier"] = get_addres_iota(provider, seed0)
 erwin["address"] = get_addres_iota(provider, seed1)
 timen["address"] = get_addres_iota(provider, seed2)
 pi_oelfier["address"] = get_addres_iota(provider, seed3)
@@ -86,7 +93,7 @@ pi_timen["address"] = get_addres_iota(provider, seed6)
 pi_erwin["address"] = get_addres_iota(provider, seed7)
 
 # define participants
-participants = [ruud, erwin, timen, pi_ruud, pi_erwin, pi_timen]
+participants = [ruud, erwin, timen, oelfier, pi_ruud, pi_erwin, pi_timen]
 
 # check who I am with seed from env seed = os.environ['SEED']
 def who_am_I(seed):
