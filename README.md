@@ -19,6 +19,12 @@ Install dependencies on Raspberry Pi:
 
 # brew install libmpc mpfr gmp
 
+# for windows only
+# get wheel files https://www.lfd.uci.edu/~gohlke/pythonlibs/
+pip install gmpy2-2.0.8-cp36-cp36m-win_amd64.whl
+pip install netifaces‑0.10.6‑cp36‑cp36m‑win_amd64.whl
+
+# for linux only
 sudo apt-get install python3-pandas
 
 pip install -r requirements.txt
