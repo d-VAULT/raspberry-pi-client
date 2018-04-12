@@ -19,12 +19,6 @@ Install dependencies on Raspberry Pi:
 
 # brew install libmpc mpfr gmp
 
-# for windows only
-# get wheel files https://www.lfd.uci.edu/~gohlke/pythonlibs/
-pip install gmpy2-2.0.8-cp36-cp36m-win_amd64.whl
-pip install netifaces‑0.10.6‑cp36‑cp36m‑win_amd64.whl
-
-# for linux only
 sudo apt-get install python3-pandas
 
 pip install -r requirements.txt
@@ -43,10 +37,24 @@ Generate a seed
 ```
 cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1
 ```
-add this seed in an environment variable SEED.
+add environment variables SEED and FLASK_APP:
 
 ```
 export SEED=<yourseed>
+export FLASK_APP=app.py
+```
+
+Install dependencies on Windows:
+```
+Get your wheel files here https://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+pip install gmpy2-2.0.8-cp36-cp36m-win_amd64.whl
+pip install netifaces‑0.10.6‑cp36‑cp36m‑win_amd64.whl
+```
+add environment variables SEED and FLASK_APP
+```
+setx SEED <yourseed>
+setx FLASH_APP app.y
 ```
 
 ### Tests
